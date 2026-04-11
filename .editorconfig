@@ -1,0 +1,44 @@
+# 顶层配置，所有子目录继承
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# 默认缩进（适用于大多数前端代码）
+indent_style = space
+indent_size = 2
+
+# Markdown 允许行尾空格（用于换行）
+[*.md]
+trim_trailing_whitespace = false
+
+# JSON / YAML
+[*.{json,yml,yaml}]
+indent_size = 2
+
+# JS / TS / JSX / TSX
+[*.{js,ts,jsx,tsx}]
+indent_size = 2
+
+# CSS / SCSS / Less
+[*.{css,scss,less}]
+indent_size = 2
+
+# HTML / Vue
+[*.{html,vue}]
+indent_size = 2
+
+# Shell 脚本
+[*.sh]
+indent_size = 2
+
+# Makefile 必须用 tab
+[Makefile]
+indent_style = tab
+
+# Python
+[*.py]
+indent_size = 4

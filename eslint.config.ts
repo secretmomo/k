@@ -4,14 +4,13 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import unusedImports from 'eslint-plugin-unused-imports';
-
 import type { Plugin } from '@eslint/config-helpers';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig(
   // 忽略文件
   {
-    ignores: ['**/dist/**', '**/build/**', '**/node_modules/**', '**/.turbo/**'],
+    ignores: ['**/dist/**', '**/build/**', '**/node_modules/**', '**/.turbo/**', 'bun.lock'],
   },
 
   // 基础 JS 规则

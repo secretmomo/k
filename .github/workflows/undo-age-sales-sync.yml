@@ -1,0 +1,45 @@
+name: 营养工厂销量数据同步
+
+on:
+  schedule:
+    - cron: '5 1 * * 0'
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '触发原因（可选）'
+        required: false
+        type: string
+        default: 'Github Actions 页面手动触发'
+
+env:
+  WORKFLOW_NAME: ${{ github.workflow }}
+  RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  LARK_CHAT_ID: ${{ secrets.LARK_UNDO_AGE_CHAT_ID }}
+  LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
+  LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
+  NOTION_AUTH_TOKEN: ${{ secrets.NOTION_WIKI_AUTH_TOKEN }}
+  NOTION_DATA_SOURCE_ID: ${{ secrets.NOTION_UNDO_AGE_DATA_SOURCE_ID }}
+
+jobs:
+  run:
+    name: 同步销量数据
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v6
+
+      - name: 安装 Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: 安装依赖
+        run: bun install --frozen-lockfile
+
+      - name: 构建通知模块
+        working-directory: packages/notifier
+        run: bun run build
+
+      - name: 运行任务
+        working-directory: schedulers/undo-age-sales-sync
+        run: bun run src/index.ts

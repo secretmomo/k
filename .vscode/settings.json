@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "cSpell.words": ["bunx", "checkin", "larksuiteoapi", "wathet"]
+  "cSpell.words": ["bunx", "checkin", "larksuiteoapi", "notionhq", "wathet"]
 }

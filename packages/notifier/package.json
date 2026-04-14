@@ -1,0 +1,37 @@
+{
+  "name": "@k/notifier",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    },
+    "./lark": {
+      "types": "./lib/lark/index.d.ts",
+      "import": "./lib/lark/index.js"
+    },
+    "./telegram": {
+      "types": "./lib/telegram/index.d.ts",
+      "import": "./lib/telegram/index.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@larksuiteoapi/node-sdk": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": "catalog:"
+  }
+}

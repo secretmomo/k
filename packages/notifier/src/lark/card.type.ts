@@ -9,6 +9,10 @@ export interface InteractiveCard {
   body: InteractiveCardBody;
 }
 
+type TextSize = 'heading' | 'normal' | 'normal_v2' | 'notation';
+type HorizontalAlign = 'left' | 'center' | 'right';
+type VerticalAlign = 'top' | 'center' | 'bottom';
+
 interface InteractiveCardConfig {
   enable_forward?: boolean;
   update_multi?: boolean;
@@ -37,13 +41,18 @@ export interface InteractiveCardHeader {
 
 export interface InteractiveCardBody {
   direction: 'vertical' | 'horizontal';
+  padding?: string;
+  horizontal_spacing?: string;
+  vertical_spacing?: string;
+  vertical_align?: VerticalAlign;
+  horizontal_align?: HorizontalAlign;
   elements: InteractiveCardElement[];
 }
 
-export type InteractiveCardElement = InteractiveCardMarkdownElement | InteractiveCardButtonElement;
-
-type TextSize = 'heading' | 'normal' | 'normal_v2' | 'notation';
-type TextAlign = 'left' | 'center' | 'right';
+export type InteractiveCardElement =
+  | InteractiveCardMarkdownElement
+  | InteractiveCardButtonElement
+  | InteractiveCardTableElement;
 
 interface InteractiveCardBaseElement {
   margin?: string;
@@ -53,7 +62,7 @@ export interface InteractiveCardMarkdownElement extends InteractiveCardBaseEleme
   tag: 'markdown';
   content: string;
   text_size?: TextSize;
-  text_align?: TextAlign;
+  text_align?: HorizontalAlign;
 }
 
 type ButtonType =
@@ -80,4 +89,26 @@ export interface InteractiveCardButtonElement extends InteractiveCardBaseElement
     tag: 'plain_text';
     content: string;
   };
+}
+export interface InteractiveCardTableElement extends InteractiveCardBaseElement {
+  tag: 'table';
+  row_height: 'low' | 'middle' | 'high' | string;
+  header_style: {
+    background_style: 'none' | 'gray';
+    bold: boolean;
+    lines: number;
+  };
+  page_size: number;
+  columns: InteractiveCardTableColumn[];
+  rows: Array<Record<string, any>>;
+}
+
+interface InteractiveCardTableColumn {
+  data_type: 'text' | 'options' | 'number' | 'date' | 'markdown' | 'persons';
+  name: string;
+  display_name: string;
+  horizontal_align?: HorizontalAlign;
+  vertical_align?: VerticalAlign;
+  width?: 'auto' | string;
+  format?: { precision: number };
 }

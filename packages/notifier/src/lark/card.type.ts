@@ -50,8 +50,12 @@ export interface InteractiveCardBody {
 }
 
 export type InteractiveCardElement =
-  | InteractiveCardMarkdownElement
   | InteractiveCardButtonElement
+  | InteractiveCardChartElement
+  | InteractiveCardColumnSetElement
+  | InteractiveCardDivElement
+  | InteractiveCardDividerElement
+  | InteractiveCardMarkdownElement
   | InteractiveCardTableElement;
 
 interface InteractiveCardBaseElement {
@@ -75,10 +79,12 @@ type ButtonType =
   | 'danger_text';
 type ButtonSize = 'tiny' | 'small' | 'medium' | 'large';
 type ButtonWidth = 'default' | 'fill' | string;
+
 interface ButtonBehavior {
   type: 'open_url';
   default_url: string;
 }
+
 export interface InteractiveCardButtonElement extends InteractiveCardBaseElement {
   tag: 'button';
   type: ButtonType;
@@ -90,6 +96,7 @@ export interface InteractiveCardButtonElement extends InteractiveCardBaseElement
     content: string;
   };
 }
+
 export interface InteractiveCardTableElement extends InteractiveCardBaseElement {
   tag: 'table';
   row_height: 'low' | 'middle' | 'high' | string;
@@ -111,4 +118,67 @@ interface InteractiveCardTableColumn {
   vertical_align?: VerticalAlign;
   width?: 'auto' | string;
   format?: { precision: number };
+}
+
+export interface InteractiveCardDividerElement extends InteractiveCardBaseElement {
+  tag: 'hr';
+}
+
+export interface InteractiveCardDivElement extends InteractiveCardBaseElement {
+  tag: 'div';
+  icon: {
+    tag: 'standard_icon';
+    token: string;
+    color?: 'black' | 'grey' | 'red' | 'white' | 'blue' | 'green' | 'orange' | 'light_grey';
+  };
+  text: {
+    tag: 'plain_text';
+    content: string;
+    text_size?: TextSize;
+    text_align?: HorizontalAlign;
+    text_color?: 'default' | 'grey' | 'red' | 'green' | 'orange';
+  };
+}
+
+export interface InteractiveCardChartElement extends InteractiveCardBaseElement {
+  tag: 'chart';
+  chart_spec: InteractiveCardChartSpec;
+  preview: boolean;
+  height: 'auto' | string;
+  aspect_ratio?: '1:1' | '2:1' | '4:3' | '16:9';
+}
+
+interface InteractiveCardChartSpec {
+  type: 'bar' | 'line';
+  title: { text: string };
+  data: { values: Array<Record<string, string | number>> };
+  xField: string;
+  yField: string;
+  axes?: Array<{ orient: 'left' | 'right'; min: number; max: number }>;
+  point?: { visible: boolean };
+  line?: { style?: { lineWidth?: number; stroke?: string } };
+}
+
+export interface InteractiveCardColumnSetElement extends InteractiveCardBaseElement {
+  tag: 'column_set';
+  flex_mode?: 'stretch' | 'bisect' | 'trisect' | 'flow';
+  background_style?: string;
+  horizontal_spacing: string;
+  horizontal_align: HorizontalAlign;
+  columns: (InteractiveCardColumnElement | null)[];
+}
+
+interface InteractiveCardColumnElement {
+  tag: 'column';
+  elements: InteractiveCardMarkdownElement[];
+  width: 'weighted' | 'auto' | string;
+  background_style?: string;
+  action?: { multi_url: { url: string } };
+  padding?: string;
+  direction?: 'vertical' | 'horizontal';
+  horizontal_spacing?: string;
+  vertical_spacing?: string;
+  horizontal_align?: HorizontalAlign;
+  vertical_align?: VerticalAlign;
+  weight?: number;
 }

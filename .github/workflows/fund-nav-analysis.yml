@@ -32,14 +32,6 @@ jobs:
       - name: 安装依赖
         run: bun install --frozen-lockfile
 
-      - name: 构建工具模块
-        working-directory: packages/utils
-        run: bun run build
-
-      - name: 构建通知模块
-        working-directory: packages/notifier
-        run: bun run build
-
       - name: 运行任务
         working-directory: schedulers/investment
         run: bun run src/modules/fund-nav-analysis/index.ts

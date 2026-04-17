@@ -38,7 +38,7 @@ export async function success(pages: PageItem[]) {
           bold: true,
           lines: 1,
         },
-        page_size: 5,
+        page_size: 10,
         margin: '0px',
         columns: [
           {

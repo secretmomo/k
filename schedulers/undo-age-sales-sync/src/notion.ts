@@ -1,23 +1,16 @@
 import {
-  Client,
+  notion,
+  traverseDataSource,
   type NumberPropertyItemObjectResponse,
   type PageObjectResponse,
-} from '@notionhq/client';
+} from '@k/notion';
 
 import type { PageItem } from './types';
 
-const notion = new Client({
-  auth: process.env.NOTION_AUTH_TOKEN,
-});
-
 export async function fetchPages(): Promise<PageItem[]> {
   const result: PageItem[] = [];
-  const data = await notion.dataSources.query({
-    data_source_id: process.env.NOTION_DATA_SOURCE_ID ?? '',
-  });
 
-  data.results.forEach((i) => {
-    const item = i as unknown as PageObjectResponse;
+  await traverseDataSource((item: PageObjectResponse) => {
     const titleProperty = item.properties['产品名称'];
     const soldCountProperty = item.properties['销量'] as NumberPropertyItemObjectResponse;
 

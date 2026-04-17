@@ -16,11 +16,13 @@
       "cheerio": "1.2.0",
       "cli-table3": "0.6.5",
       "dayjs": "1.11.20",
+      "ora": "9.3.0",
       "typescript": "6.0.2"
     }
   },
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "bun run --filter '@k/*' build"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

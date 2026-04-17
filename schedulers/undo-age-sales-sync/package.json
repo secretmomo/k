@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@k/notifier": "workspace:*",
+    "@k/notion": "workspace:*",
     "@notionhq/client": "catalog:",
-    "cli-table3": "catalog:"
+    "cli-table3": "catalog:",
+    "ora": "catalog:"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "@k/notion",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@notionhq/client": "catalog:"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": "catalog:"
+  }
+}

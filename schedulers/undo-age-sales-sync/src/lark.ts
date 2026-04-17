@@ -1,9 +1,4 @@
-import {
-  sendCardMessage,
-  type InteractiveCard,
-  type InteractiveCardHeader,
-  type InteractiveCardBody,
-} from '@k/notifier/lark';
+import { sendCardMessage, type InteractiveCard, type InteractiveCardBody } from '@k/notifier/lark';
 
 import type { PageItem } from './types';
 
@@ -14,21 +9,8 @@ export async function success(pages: PageItem[]) {
     history: page.soldCount,
   }));
 
-  const header: InteractiveCardHeader = {
-    template: 'blue',
-    title: {
-      tag: 'plain_text',
-      content: '营养工厂销量数据',
-    },
-    icon: {
-      tag: 'standard_icon',
-      token: 'sheet-line_outlined',
-    },
-    padding: '8px',
-  };
   const body: InteractiveCardBody = {
     direction: 'vertical',
-    padding: '8px',
     elements: [
       {
         tag: 'table',
@@ -67,24 +49,11 @@ export async function success(pages: PageItem[]) {
         ],
         rows,
       },
-      {
-        tag: 'button',
-        text: {
-          tag: 'plain_text',
-          content: '任务地址',
-        },
-        type: 'primary_filled',
-        width: 'default',
-        size: 'small',
-        margin: '0px',
-        behaviors: [{ type: 'open_url', default_url: process.env.RUN_URL! }],
-      },
     ],
   };
   const template: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
-    header,
     body,
   };
 

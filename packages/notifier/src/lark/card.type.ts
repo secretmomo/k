@@ -5,7 +5,7 @@
 export interface InteractiveCard {
   schema: '2.0';
   config: InteractiveCardConfig;
-  header: InteractiveCardHeader;
+  header?: InteractiveCardHeader;
   body: InteractiveCardBody;
 }
 

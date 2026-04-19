@@ -22,7 +22,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "postinstall": "bun run --filter '@k/*' build"
+    "postinstall": "bun run --filter '@k/*' clean && bun run --filter '@k/*' build"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

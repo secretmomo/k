@@ -14,7 +14,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "rm -rf lib"
   },
   "dependencies": {
     "axios": "catalog:",

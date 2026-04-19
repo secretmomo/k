@@ -28,7 +28,7 @@ async function notify(msg: string) {
     },
   };
 
-  await sendPostMessage(JSON.stringify(post));
+  await sendPostMessage(post);
 }
 
 async function getOnce() {

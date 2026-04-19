@@ -37,6 +37,7 @@ export interface InteractiveCardHeader {
   padding?: string;
   icon: { tag: 'standard_icon'; token: string };
   title: { content: string; tag: 'plain_text' };
+  subtitle?: { content: string; tag: 'plain_text' };
 }
 
 export interface InteractiveCardBody {
@@ -126,7 +127,7 @@ export interface InteractiveCardDividerElement extends InteractiveCardBaseElemen
 
 export interface InteractiveCardDivElement extends InteractiveCardBaseElement {
   tag: 'div';
-  icon: {
+  icon?: {
     tag: 'standard_icon';
     token: string;
     color?: 'black' | 'grey' | 'red' | 'white' | 'blue' | 'green' | 'orange' | 'light_grey';

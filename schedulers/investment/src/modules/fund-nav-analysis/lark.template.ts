@@ -36,7 +36,7 @@ function buildHeader(fundNavAnalysis: AnalyzeFundNavResult) {
   return header;
 }
 
-export function buildFundNavAnalysisCardMessage(fundNavAnalysis: AnalyzeFundNavResult): string {
+export function buildFundNavAnalysisCardMessage(fundNavAnalysis: AnalyzeFundNavResult) {
   const {
     fundHomePageUrl,
     etfHomePageUrl,
@@ -207,5 +207,5 @@ export function buildFundNavAnalysisCardMessage(fundNavAnalysis: AnalyzeFundNavR
     },
   };
 
-  return JSON.stringify(card);
+  return card;
 }

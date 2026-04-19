@@ -51,11 +51,11 @@ export async function success(pages: PageItem[]) {
       },
     ],
   };
-  const template: InteractiveCard = {
+  const card: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
     body,
   };
 
-  return sendCardMessage(JSON.stringify(template));
+  return sendCardMessage(card);
 }

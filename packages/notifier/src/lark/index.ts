@@ -49,13 +49,13 @@ export async function sendTextMessage(message: string) {
  * 发送富文本消息，文档地址：
  * https://open.feishu.cn/document/server-docs/im-v1/message-content-description/create_json#45e0953e
  */
-export async function sendPostMessage(content: string) {
+export async function sendPostMessage(post: Post) {
   return await client.im.v1.message.create({
     params: { receive_id_type: 'chat_id' },
     data: {
       receive_id: chatId,
       msg_type: 'post',
-      content,
+      content: JSON.stringify(post),
     },
   });
 }
@@ -64,13 +64,13 @@ export async function sendPostMessage(content: string) {
  * 发送卡片消息，文档地址：
  * https://open.feishu.cn/document/server-docs/im-v1/message-content-description/create_json#3ea4c2d5
  */
-export async function sendCardMessage(content: string) {
+export async function sendCardMessage(card: InteractiveCard) {
   return await client.im.v1.message.create({
     params: { receive_id_type: 'chat_id' },
     data: {
       receive_id: chatId,
       msg_type: 'interactive',
-      content,
+      content: JSON.stringify(card),
     },
   });
 }
@@ -79,7 +79,7 @@ export async function sendCardMessage(content: string) {
  * 发送通用的错误卡片消息
  */
 export async function sendErrorCardMessage(message: string) {
-  const tpl: InteractiveCard = {
+  const card: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
     header: {
@@ -103,7 +103,7 @@ export async function sendErrorCardMessage(message: string) {
   };
 
   if (process.env.RUN_URL) {
-    tpl.body.elements.push({
+    card.body.elements.push({
       tag: 'button',
       type: 'danger_filled',
       width: 'default',
@@ -122,7 +122,7 @@ export async function sendErrorCardMessage(message: string) {
     });
   }
 
-  return await sendCardMessage(JSON.stringify(tpl));
+  return await sendCardMessage(card);
 }
 
 /**

@@ -1,6 +1,13 @@
 import { test, expect } from 'bun:test';
 
-import { sendTextMessage, sendPostMessage, sendCardMessage, sendErrorCardMessage } from './index';
+import {
+  sendTextMessage,
+  sendPostMessage,
+  sendCardMessage,
+  sendErrorCardMessage,
+  type InteractiveCard,
+  type Post,
+} from './index';
 
 test('sendTextMessage', async () => {
   const result = await sendTextMessage(`TEST ${new Date().toISOString()}`);
@@ -8,7 +15,7 @@ test('sendTextMessage', async () => {
 });
 
 test('sendPostMessage', async () => {
-  const content = JSON.stringify({
+  const post: Post = {
     zh_cn: {
       title: `TEST ${new Date().toISOString()}`,
       content: [
@@ -26,14 +33,14 @@ test('sendPostMessage', async () => {
         ],
       ],
     },
-  });
+  };
 
-  const result = await sendPostMessage(content);
+  const result = await sendPostMessage(post);
   expect(result).toBeDefined();
 });
 
 test('sendCardMessage', async () => {
-  const content = JSON.stringify({
+  const card: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
     header: {
@@ -66,9 +73,9 @@ test('sendCardMessage', async () => {
         },
       ],
     },
-  });
+  };
 
-  const result = await sendCardMessage(content);
+  const result = await sendCardMessage(card);
   expect(result).toBeDefined();
 });
 

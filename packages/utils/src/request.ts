@@ -2,6 +2,25 @@ import { sleep } from 'bun';
 
 const MAX_RETRIES = 5; // 最大重试次数
 const BASE_RETRY_DELAY = 2000; // 基础重试延迟（毫秒）
+const UA =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
+/**
+ * 从绝对 URL 解析同源根地址，用作 Referer（`${origin}/`）。
+ * 非 http(s) 或解析失败时返回 undefined。
+ */
+function refererFromUrl(url: string): string | undefined {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return `${parsed.origin}/`;
+    }
+  } catch {
+    // 非绝对 URL 或非法地址
+  }
+
+  return undefined;
+}
 
 /**
  * 带重试机制的 fetch 函数
@@ -9,8 +28,7 @@ const BASE_RETRY_DELAY = 2000; // 基础重试延迟（毫秒）
  */
 export async function fetchText(url: string, retries = MAX_RETRIES): Promise<string> {
   const headers: Record<string, string> = {
-    'User-Agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'User-Agent': UA,
     Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
     'Accept-Encoding': 'gzip, deflate, br',
@@ -18,9 +36,9 @@ export async function fetchText(url: string, retries = MAX_RETRIES): Promise<str
     'Upgrade-Insecure-Requests': '1',
   };
 
-  // 如果是 eastmoney 域名，添加 Referer
-  if (url.includes('eastmoney.com')) {
-    headers['Referer'] = 'https://www.eastmoney.com/';
+  const referer = refererFromUrl(url);
+  if (referer) {
+    headers['Referer'] = referer;
   }
 
   try {

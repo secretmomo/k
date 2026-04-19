@@ -1,6 +1,6 @@
 import * as lark from '@larksuiteoapi/node-sdk';
 
-import type { Post } from './post.type';
+import type { Post } from './types/post.type';
 import type {
   InteractiveCard,
   InteractiveCardHeader,
@@ -8,7 +8,8 @@ import type {
   InteractiveCardElement,
   InteractiveCardMarkdownElement,
   InteractiveCardButtonElement,
-} from './card.type';
+} from './types/card.type';
+import type { LarkMessageReceiveEvent } from './types/receive.type';
 
 export type {
   Post,
@@ -18,6 +19,7 @@ export type {
   InteractiveCardElement,
   InteractiveCardMarkdownElement,
   InteractiveCardButtonElement,
+  LarkMessageReceiveEvent,
 };
 
 const client = new lark.Client({
@@ -73,7 +75,10 @@ export async function sendCardMessage(content: string) {
   });
 }
 
-export async function sendErrorCardMessage(content: string) {
+/**
+ * 发送通用的错误卡片消息
+ */
+export async function sendErrorCardMessage(message: string) {
   const tpl: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
@@ -88,7 +93,7 @@ export async function sendErrorCardMessage(content: string) {
       elements: [
         {
           tag: 'markdown',
-          content: `<font color="red">${content}</font>`,
+          content: `<font color="red">${message}</font>`,
           text_size: 'normal_v2',
           text_align: 'left',
           margin: '0px 0px 0px 0px',
@@ -118,4 +123,34 @@ export async function sendErrorCardMessage(content: string) {
   }
 
   return await sendCardMessage(JSON.stringify(tpl));
+}
+
+/**
+ * [回复文本消息](https://open.feishu.cn/document/server-docs/im-v1/message/reply)
+ */
+export async function replyTextMessage(message_id: string, message: string) {
+  return await client.im.v1.message.reply({
+    path: { message_id },
+    data: {
+      msg_type: 'text',
+      reply_in_thread: false,
+      content: JSON.stringify({ text: message }),
+    },
+  });
+}
+
+/**
+ * 启动 WebSocket 客户端
+ *
+ * @param callback 回调函数
+ */
+export function startWsClient(callback: (event: LarkMessageReceiveEvent) => void) {
+  const wsClient = new lark.WSClient({
+    appId: process.env.LARK_APP_ID ?? '',
+    appSecret: process.env.LARK_APP_SECRET ?? '',
+  });
+
+  wsClient.start({
+    eventDispatcher: new lark.EventDispatcher({}).register({ 'im.message.receive_v1': callback }),
+  });
 }

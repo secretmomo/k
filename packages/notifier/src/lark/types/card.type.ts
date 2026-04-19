@@ -34,7 +34,7 @@ export interface InteractiveCardHeader {
     | 'indigo'
     | 'gray'
     | 'default';
-  padding: string;
+  padding?: string;
   icon: { tag: 'standard_icon'; token: string };
   title: { content: string; tag: 'plain_text' };
 }
@@ -101,7 +101,7 @@ export interface InteractiveCardTableElement extends InteractiveCardBaseElement 
   tag: 'table';
   row_height: 'low' | 'middle' | 'high' | string;
   header_style: {
-    background_style: 'none' | 'gray';
+    background_style: 'none' | 'grey';
     bold: boolean;
     lines: number;
   };

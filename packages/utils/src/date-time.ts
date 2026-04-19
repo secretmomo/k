@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 
-export function dateTimeToNow(): string {
-  return dayjs().format('YYYY-MM-DD HH:mm:ss');
+export function dateTimeToNow(fmt = 'YYYY-MM-DD HH:mm:ss'): string {
+  return dayjs().format(fmt);
 }
 
-export function dateToNow(): string {
-  return dayjs().format('YYYY-MM-DD');
+export function dateToNow(fmt = 'YYYY-MM-DD'): string {
+  return dayjs().format(fmt);
 }
 
 /**
@@ -13,6 +13,6 @@ export function dateToNow(): string {
  * @param timestamp 时间戳（毫秒）
  * @returns 日期（YYYY-MM-DD）
  */
-export function timestampToDate(timestamp: number): string {
-  return dayjs(timestamp).format('YYYY-MM-DD');
+export function timestampToDate(timestamp: number, fmt = 'YYYY-MM-DD'): string {
+  return dayjs(timestamp).format(fmt);
 }

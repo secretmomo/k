@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@k/notifier": "workspace:*",
+    "@k/notion": "workspace:*",
     "@k/utils": "workspace:*",
     "@notionhq/client": "catalog:",
-    "cli-table3": "catalog:"
+    "cheerio": "catalog:",
+    "cli-table3": "catalog:",
+    "ora": "catalog:"
   }
 }

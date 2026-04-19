@@ -2,7 +2,7 @@ name: 营养工厂销量数据同步
 
 on:
   schedule:
-    - cron: '5 1 * * 0'
+    - cron: '5 1 * * *'
   workflow_dispatch:
     inputs:
       reason:
@@ -14,7 +14,7 @@ on:
 env:
   WORKFLOW_NAME: ${{ github.workflow }}
   RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-  LARK_CHAT_ID: ${{ secrets.LARK_UNDO_AGE_CHAT_ID }}
+  LARK_CHAT_ID: ${{ secrets.LARK_TEST_CHAT_ID }}
   LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
   LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
   NOTION_AUTH_TOKEN: ${{ secrets.NOTION_WIKI_AUTH_TOKEN }}

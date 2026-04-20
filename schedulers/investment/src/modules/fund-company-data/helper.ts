@@ -111,7 +111,7 @@ export function buildLarkCard(infos: FundCompanyInfo[]): InteractiveCard {
           bold: true,
           lines: 1,
         },
-        page_size: 5,
+        page_size: 10,
         margin: '0px',
         columns: [
           {
@@ -119,7 +119,7 @@ export function buildLarkCard(infos: FundCompanyInfo[]): InteractiveCard {
             name: 'name',
             display_name: '公司名称',
             horizontal_align: 'left',
-            width: '100px',
+            width: 'auto',
           },
           {
             data_type: 'number',

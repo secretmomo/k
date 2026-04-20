@@ -1,9 +1,6 @@
 name: 基金公司数据同步
 
 on:
-  schedule:
-    - cron: '6 6 * * 0'
-      timezone: 'Asia/Shanghai'
   workflow_dispatch:
     inputs:
       reason:

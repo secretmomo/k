@@ -32,12 +32,27 @@ export interface InteractiveCardHeader {
     | 'violet'
     | 'purple'
     | 'indigo'
-    | 'gray'
+    | 'grey'
     | 'default';
   padding?: string;
   icon: { tag: 'standard_icon'; token: string };
   title: { content: string; tag: 'plain_text' };
   subtitle?: { content: string; tag: 'plain_text' };
+  text_tag_list?: {
+    tag: 'text_tag';
+    text: { content: string; tag: 'plain_text' };
+    color:
+      | 'green'
+      | 'blue'
+      | 'red'
+      | 'yellow'
+      | 'orange'
+      | 'purple'
+      | 'pink'
+      | 'brown'
+      | 'grey'
+      | 'black';
+  }[];
 }
 
 export interface InteractiveCardBody {
@@ -56,6 +71,7 @@ export type InteractiveCardElement =
   | InteractiveCardColumnSetElement
   | InteractiveCardDivElement
   | InteractiveCardDividerElement
+  | InteractiveCardImgElement
   | InteractiveCardMarkdownElement
   | InteractiveCardTableElement;
 
@@ -182,4 +198,14 @@ interface InteractiveCardColumnElement {
   horizontal_align?: HorizontalAlign;
   vertical_align?: VerticalAlign;
   weight?: number;
+}
+
+export interface InteractiveCardImgElement extends InteractiveCardBaseElement {
+  tag: 'img';
+  img_key: string;
+  preview?: boolean;
+  transparent?: boolean;
+  scale_type: 'fit_horizontal' | 'crop_center' | 'crop_top';
+  size?: 'stretch' | 'large' | 'medium' | 'small' | 'tiny' | string;
+  corner_radius?: string;
 }

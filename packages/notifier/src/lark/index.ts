@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+
 import * as lark from '@larksuiteoapi/node-sdk';
 
 import type { Post } from './types/post.type';
@@ -137,6 +139,41 @@ export async function replyTextMessage(message_id: string, message: string) {
       content: JSON.stringify({ text: message }),
     },
   });
+}
+
+export async function replyCardMessage(message_id: string, card: InteractiveCard) {
+  return await client.im.v1.message.reply({
+    path: { message_id },
+    data: {
+      msg_type: 'interactive',
+      reply_in_thread: false,
+      content: JSON.stringify(card),
+    },
+  });
+}
+
+/**
+ * 更新卡片消息，文档地址：
+ * https://open.feishu.cn/document/server-docs/im-v1/message-card/patch
+ */
+export async function updateCardMessage(message_id: string, card: InteractiveCard) {
+  return await client.im.v1.message.patch({
+    path: { message_id },
+    data: {
+      content: JSON.stringify(card),
+    },
+  });
+}
+
+export async function uploadImage(filePath: string): Promise<string> {
+  const res = await client.im.v1.image.create({
+    data: {
+      image_type: 'message',
+      image: fs.readFileSync(filePath),
+    },
+  });
+
+  return res!.image_key!;
 }
 
 /**

@@ -1,0 +1,21 @@
+{
+  "name": "notion-archiver",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "catalog:"
+  },
+  "peerDependencies": {
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@k/notifier": "workspace:*",
+    "@k/notion": "workspace:*",
+    "@k/utils": "workspace:*",
+    "chalk": "catalog:",
+    "consola": "catalog:",
+    "cheerio": "catalog:",
+    "single-file-cli": "2.0.83"
+  }
+}

@@ -12,6 +12,7 @@
   "dependencies": {
     "@k/notifier": "workspace:*",
     "@k/notion": "workspace:*",
+    "@k/utils": "workspace:*",
     "cli-table3": "catalog:",
     "ora": "catalog:"
   }

@@ -1,4 +1,10 @@
-import { sendCardMessage, type InteractiveCard, type InteractiveCardBody } from '@k/notifier/lark';
+import {
+  sendCardMessage,
+  type InteractiveCard,
+  type InteractiveCardBody,
+  type InteractiveCardHeader,
+} from '@k/notifier/lark';
+import { dateToNow } from '@k/utils';
 
 import type { PageItem } from './types';
 
@@ -9,6 +15,17 @@ export async function success(pages: PageItem[]) {
     history: page.soldCount,
   }));
 
+  const header: InteractiveCardHeader = {
+    title: {
+      tag: 'plain_text',
+      content: `营养工厂销量数据（截止到 ${dateToNow()}）`,
+    },
+    template: 'blue',
+    icon: {
+      tag: 'standard_icon',
+      token: 'sheet-line_outlined',
+    },
+  };
   const body: InteractiveCardBody = {
     direction: 'vertical',
     elements: [
@@ -16,7 +33,7 @@ export async function success(pages: PageItem[]) {
         tag: 'table',
         row_height: 'low',
         header_style: {
-          background_style: 'none',
+          background_style: 'grey',
           bold: true,
           lines: 1,
         },
@@ -54,6 +71,7 @@ export async function success(pages: PageItem[]) {
   const card: InteractiveCard = {
     schema: '2.0',
     config: { update_multi: true },
+    header,
     body,
   };
 

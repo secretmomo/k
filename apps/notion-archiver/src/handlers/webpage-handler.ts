@@ -1,3 +1,5 @@
+import { unlinkSync } from 'node:fs';
+
 import { Handler } from './handler';
 import { parseTitle } from '../helpers/title-parser';
 import { createPage } from '../helpers/notion';
@@ -35,5 +37,9 @@ export class WebpageHandler extends Handler {
     // 5. 生成预览图，并更新卡片状态
     const imagePath = await screenshot(htmlFilePath);
     await state.success(imagePath);
+
+    // 6. 清理资源，删除图片和网页
+    unlinkSync(imagePath);
+    unlinkSync(htmlFilePath);
   }
 }

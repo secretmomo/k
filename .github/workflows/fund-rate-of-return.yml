@@ -12,7 +12,7 @@ on:
 env:
   WORKFLOW_NAME: ${{ github.workflow }}
   RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-  LARK_CHAT_ID: ${{ secrets.LARK_TEST_CHAT_ID }}
+  LARK_CHAT_ID: ${{ secrets.LARK_FUND_RATE_OF_RETURN_CHAT_ID }}
   LARK_APP_ID: ${{ secrets.LARK_APP_ID }}
   LARK_APP_SECRET: ${{ secrets.LARK_APP_SECRET }}
   NOTION_AUTH_TOKEN: ${{ secrets.NOTION_INVESTMENT_AUTH_TOKEN }}

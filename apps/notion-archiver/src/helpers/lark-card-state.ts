@@ -10,6 +10,8 @@ import {
 } from '@k/notifier/lark';
 import { genId } from '@k/utils';
 
+import { macHardwareInfo } from './env';
+
 export class LarkCardState {
   private id = genId();
   private logger = consola.withTag(this.id);
@@ -104,7 +106,7 @@ export class LarkCardState {
         tag: 'div',
         text: {
           tag: 'plain_text',
-          content: this.id,
+          content: `${this.id} - ${macHardwareInfo.modelName}`,
           text_size: 'notation',
           text_color: 'grey',
         },

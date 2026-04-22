@@ -33,7 +33,14 @@ export default defineConfig(
 
       // ✅ 自动删除未使用 import
       'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'unused-imports/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
 
       // import 排序
       'import/order': [

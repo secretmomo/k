@@ -1,5 +1,7 @@
 import { unlinkSync } from 'node:fs';
 
+import { traverseDataSource } from '@k/notion';
+
 import { Handler } from './handler';
 import { parseTitle } from '../helpers/title-parser';
 import { createPage } from '../helpers/notion';
@@ -7,7 +9,36 @@ import { downloadWebpage } from '../helpers/webpage-downloader';
 import { LarkCardState } from '../helpers/lark-card-state';
 import { screenshot } from '../helpers/screenshot';
 
+const tagMap: Record<string, string> = {
+  t: '待读',
+  h: '重要',
+};
+
 export class WebpageHandler extends Handler {
+  /**
+   * 已保存的 URL 集合，避免重复保存
+   */
+  private urls = new Set<string>();
+
+  constructor() {
+    super();
+
+    // 从 Notion 中获取已保存的 URL 集合
+    traverseDataSource((item) => {
+      const titleProperty = item.properties['名称'];
+
+      if (titleProperty?.type !== 'title') {
+        throw new Error('名称属性不是 title 类型');
+      }
+
+      const firstTitleItem = titleProperty.title[0];
+
+      if (firstTitleItem?.href) {
+        this.urls.add(firstTitleItem.href);
+      }
+    });
+  }
+
   isMatch(text: string) {
     return text.startsWith('http://') || text.startsWith('https://');
   }
@@ -19,11 +50,20 @@ export class WebpageHandler extends Handler {
 
     // 2. 解析标题、URL、标签
     const [url = '', ...tags] = text.split(' ');
+
+    if (this.urls.has(url)) {
+      await state.error(`该 URL 已保存：${url}`);
+      return;
+    } else {
+      this.urls.add(url);
+    }
+
     const title = await parseTitle(url);
 
     tags.forEach((tag, i) => {
-      tags[i] = tag.toUpperCase().trim();
+      tags[i] = tagMap[tag] ?? tag;
     });
+
     await state.updateTitle(title, url, tags);
 
     // 3. 下载网页内容

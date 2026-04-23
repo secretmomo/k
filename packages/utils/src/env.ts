@@ -7,10 +7,16 @@ interface MacHardwareInfo {
   raw: string; // 原始输出（调试用）
 }
 
+let macHardwareInfo: MacHardwareInfo | null = null;
+
 /**
  * 获取 macOS 硬件信息（基于 system_profiler）
  */
-function getMacHardwareInfo(): MacHardwareInfo {
+export function getMacHardwareInfo(): MacHardwareInfo {
+  if (macHardwareInfo) {
+    return macHardwareInfo;
+  }
+
   try {
     const output = execSync('system_profiler SPHardwareDataType', {
       encoding: 'utf-8',
@@ -22,12 +28,14 @@ function getMacHardwareInfo(): MacHardwareInfo {
       return match?.[1]?.trim() ?? null;
     };
 
-    return {
+    macHardwareInfo = {
       modelName: getValue('Model Name'),
       modelIdentifier: getValue('Model Identifier'),
       chip: getValue('Chip') || getValue('Processor Name'), // 兼容 Intel
       raw: output,
     };
+
+    return macHardwareInfo;
   } catch (_e: unknown) {
     return {
       modelName: null,
@@ -37,5 +45,3 @@ function getMacHardwareInfo(): MacHardwareInfo {
     };
   }
 }
-
-export const macHardwareInfo = getMacHardwareInfo();

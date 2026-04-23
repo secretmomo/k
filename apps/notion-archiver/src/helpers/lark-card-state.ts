@@ -8,9 +8,7 @@ import {
   updateCardMessage,
   uploadImage,
 } from '@k/notifier/lark';
-import { genId } from '@k/utils';
-
-import { macHardwareInfo } from './env';
+import { genId, getMacHardwareInfo } from '@k/utils';
 
 export class LarkCardState {
   private id = genId();
@@ -97,6 +95,9 @@ export class LarkCardState {
   }
 
   private footerElements(): InteractiveCardElement[] {
+    const { chip, modelName } = getMacHardwareInfo();
+    const nodeName = `${modelName}(${chip})`;
+
     return [
       {
         tag: 'hr',
@@ -106,7 +107,7 @@ export class LarkCardState {
         tag: 'div',
         text: {
           tag: 'plain_text',
-          content: `${this.id} - ${macHardwareInfo.modelName}`,
+          content: `${this.id} - ${nodeName}`,
           text_size: 'notation',
           text_color: 'grey',
         },

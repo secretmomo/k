@@ -1,6 +1,8 @@
-import { startWsClient, type LarkMessageReceiveEvent } from '@k/notifier/lark';
+import { startWsClient, sendCardMessage, type LarkMessageReceiveEvent } from '@k/notifier/lark';
 
 import { handle } from './handlers';
+import { startSuccessCard } from './helpers/lark.template';
+import { safeExit } from './helpers/exit';
 
 function dispatcher(event: LarkMessageReceiveEvent) {
   const { message, sender } = event;
@@ -20,3 +22,9 @@ function dispatcher(event: LarkMessageReceiveEvent) {
 }
 
 startWsClient(dispatcher);
+
+sendCardMessage(startSuccessCard());
+
+process.on('SIGINT', async () => {
+  await safeExit();
+});

@@ -1,14 +1,12 @@
-import { replyTextMessage } from '@k/notifier/lark';
-
 import { Handler } from './handler';
+import { safeExit } from '../helpers/exit';
 
 export class ExitHandler extends Handler {
   isMatch(text: string) {
     return text === 'exit';
   }
 
-  async process(message_id: string): Promise<void> {
-    await replyTextMessage(message_id, '退出程序');
-    process.exit(0);
+  async process(): Promise<void> {
+    await safeExit();
   }
 }

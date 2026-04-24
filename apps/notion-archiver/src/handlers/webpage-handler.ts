@@ -61,7 +61,7 @@ export class WebpageHandler extends Handler {
     const title = await parseTitle(url);
 
     tags.forEach((tag, i) => {
-      tags[i] = tagMap[tag] ?? tag;
+      tags[i] = tagMap[tag.toLowerCase()] ?? tag;
     });
 
     await state.updateTitle(title, url, tags);

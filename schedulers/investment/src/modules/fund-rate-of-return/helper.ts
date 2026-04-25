@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import type { InteractiveCard, InteractiveCardBody, InteractiveCardHeader } from '@k/notifier/lark';
 import {
   n,
-  notion,
+  newNotionClient,
   traverseDataSource,
   type PageObjectResponse,
   type RichTextItemResponse,
@@ -47,7 +47,7 @@ export async function readFromNotion(): Promise<FundInfo[]> {
 export async function updateNotionPage(fund: FundInfo) {
   const { id, returnRates } = fund;
 
-  await notion.pages.update({
+  await newNotionClient().pages.update({
     page_id: id,
     properties: {
       基金规模: { number: n(fund.aum) },

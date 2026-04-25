@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
 import Table from 'cli-table3';
 import type { InteractiveCard, InteractiveCardBody, InteractiveCardHeader } from '@k/notifier/lark';
-import { n, notion, traverseDataSource, type PageObjectResponse } from '@k/notion';
+import { n, newNotionClient, traverseDataSource, type PageObjectResponse } from '@k/notion';
 import { dateToNow } from '@k/utils';
 
 import type { FundCompanyInfo } from './types';
@@ -72,7 +72,7 @@ export async function readFromNotion(): Promise<FundCompanyInfo[]> {
 export async function updateNotionPage(info: FundCompanyInfo) {
   const { id, aum, fundCount, managerCount } = info;
 
-  await notion.pages.update({
+  await newNotionClient().pages.update({
     page_id: id,
     properties: {
       管理规模: { number: n(aum) },

@@ -1,4 +1,4 @@
-import { notion, uploadLocalFileToPageBody } from '@k/notion';
+import { newNotionClient, uploadLocalFileToPageBody } from '@k/notion';
 
 interface CreatePageOptions {
   title: string;
@@ -21,7 +21,7 @@ function getSourceName(url: string): string {
 export async function createPage(options: CreatePageOptions) {
   const { title, url, tags, htmlFilePath } = options;
 
-  const page = await notion.pages.create({
+  const page = await newNotionClient().pages.create({
     parent: { data_source_id: process.env.NOTION_DATA_SOURCE_ID ?? '' },
     properties: {
       名称: {

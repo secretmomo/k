@@ -1,5 +1,5 @@
 import {
-  notion,
+  newNotionClient,
   traverseDataSource,
   type NumberPropertyItemObjectResponse,
   type PageObjectResponse,
@@ -35,7 +35,7 @@ export async function fetchPages(): Promise<PageItem[]> {
 }
 
 export async function updatePage({ id, lastSoldCount }: PageItem) {
-  await notion.pages.update({
+  await newNotionClient().pages.update({
     page_id: id,
     properties: {
       销量: {

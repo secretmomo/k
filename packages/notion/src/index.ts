@@ -13,12 +13,14 @@ export function n(num?: number) {
   return num ?? null;
 }
 
-export const notion = new Client({
-  auth: process.env.NOTION_AUTH_TOKEN,
-});
+export function newNotionClient() {
+  return new Client({
+    auth: process.env.NOTION_AUTH_TOKEN,
+  });
+}
 
 export async function traverseDataSource(cb: (item: PageObjectResponse) => void) {
-  const data = await notion.dataSources.query({
+  const data = await newNotionClient().dataSources.query({
     data_source_id: process.env.NOTION_DATA_SOURCE_ID ?? '',
   });
 
@@ -42,6 +44,7 @@ export async function uploadLocalFileToPageBody(pageId: string, absolutePath: st
   // 否则 multipart 会落成 application/octet-stream，Notion 会校验失败
   const contentType = 'text/html';
   const data = new Blob([await file.arrayBuffer()], { type: contentType });
+  const notion = newNotionClient();
   const created = await notion.fileUploads.create({
     mode: 'single_part',
     filename: displayName,

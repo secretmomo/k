@@ -31,7 +31,7 @@ export class LarkCardState {
 
   // 步骤二：更新标题、地址、标签
   async updateTitle(title: string, url: string, tags: string[]) {
-    this.logger.info(`2. title: ${title}, url: ${url}, tags: ${tags.join(',')}`);
+    this.logger.info(`2. title: ${title}, tags: ${tags.join(',')}`);
 
     this.title = title;
     this.url = url;
@@ -45,7 +45,7 @@ export class LarkCardState {
 
   // 步骤三：下载网页内容
   async updateHtmlFilePath(htmlFilePath: string) {
-    this.logger.info(`3. htmlFilePath: ${htmlFilePath}`);
+    this.logger.info(`3. htmlFileName: ${basename(htmlFilePath)}`);
 
     this.htmlFilePath = htmlFilePath;
 
@@ -72,7 +72,7 @@ export class LarkCardState {
 
     await updateCardMessage(this.messageId, this.successCard(imageKey));
 
-    this.logger.success(`5. 成功 imageKey: ${imageKey}`);
+    this.logger.success('5. 任务执行成功');
   }
 
   async error(content: string) {

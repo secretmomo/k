@@ -124,15 +124,19 @@ export async function screenshot(htmlFilePath: string): Promise<string> {
   ];
 
   const proc = Bun.spawn([chrome, ...args], {
-    stdout: 'inherit',
-    stderr: 'inherit',
+    stdout: 'ignore',
+    stderr: 'pipe',
     env: process.env,
   });
+  const stderrTextPromise = proc.stderr ? new Response(proc.stderr).text() : Promise.resolve('');
 
   const wroteImage = await waitForFile(outputImagePath, 15000);
   if (!wroteImage) {
     const exitCode = await proc.exited;
-    throw new Error(`截图输出文件未生成，exitCode=${exitCode}，html=${htmlFilePath}`);
+    const stderrText = await stderrTextPromise;
+    throw new Error(
+      `截图输出文件未生成，exitCode=${exitCode}，html=${htmlFilePath}${stderrText ? `，stderr=${stderrText}` : ''}`,
+    );
   }
 
   const terminatedByUs = await terminateProcessGracefully(proc, 1000);
@@ -140,7 +144,10 @@ export async function screenshot(htmlFilePath: string): Promise<string> {
   const exitCode = await proc.exited;
 
   if (!terminatedByUs && exitCode !== 0) {
-    throw new Error(`Chrome Headless 截图失败，exitCode=${exitCode}，html=${htmlFilePath}`);
+    const stderrText = await stderrTextPromise;
+    throw new Error(
+      `Chrome Headless 截图失败，exitCode=${exitCode}，html=${htmlFilePath}${stderrText ? `，stderr=${stderrText}` : ''}`,
+    );
   }
 
   return outputImagePath;

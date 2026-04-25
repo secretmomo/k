@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { sendPostMessage, sendErrorCardMessage, type Post } from '@k/notifier/lark';
+import { sendCardMessage, sendErrorCardMessage } from '@k/notifier/lark';
+
+import { buildLarkCard } from './lark';
 
 const client = axios.create({
   headers: {
@@ -8,28 +10,6 @@ const client = axios.create({
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
   },
 });
-
-async function notify(msg: string) {
-  const post: Post = {
-    zh_cn: {
-      content: [
-        [
-          {
-            tag: 'text',
-            text: msg,
-          },
-          {
-            tag: 'a',
-            href: process.env.RUN_URL!,
-            text: '任务地址',
-          },
-        ],
-      ],
-    },
-  };
-
-  await sendPostMessage(post);
-}
 
 async function getOnce() {
   const { data: html } = await client.get('https://www.v2ex.com/mission/daily');
@@ -57,13 +37,13 @@ async function getBalance() {
 
 async function notifyCheckInSuccess(html: string) {
   const match = html.match(/已成功领取每日登录奖励 (\d+) 铜币/);
-  const checkInCoin = match?.[1] || 0;
+  const checkInCoin = Number(match?.[1] || 0);
 
   const match2 = html.match(/已连续登录 (\d+) 天/);
-  const totalLoginDays = match2?.[1] || 0;
+  const totalLoginDays = Number(match2?.[1] || 0);
   const coins = await getBalance();
 
-  await notify(`✅ ${totalLoginDays} 天，${checkInCoin}/${coins} 铜币。`);
+  await sendCardMessage(buildLarkCard(totalLoginDays, checkInCoin, coins));
 }
 
 async function checkIn() {

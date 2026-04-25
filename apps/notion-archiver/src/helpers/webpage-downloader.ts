@@ -2,7 +2,10 @@ import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import consola from 'consola';
 import { dateTimeToNow } from '@k/utils';
+
+const MAX_RETRY = 5;
 
 const root = join(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
 
@@ -15,7 +18,18 @@ async function generateOutputPath(): Promise<string> {
   return join(outputDir, `${dateTime}.html`);
 }
 
-export async function downloadWebpage(url: string): Promise<string> {
+async function isHtmlFileValid(filePath: string): Promise<boolean> {
+  const content = await Bun.file(filePath).text();
+
+  // 抓取微信公众号文章，偶尔出现验证环境异常的情况
+  if (content.includes('当前环境异常，完成验证后即可继续访问。')) {
+    return false;
+  }
+
+  return true;
+}
+
+async function download(url: string, retry = MAX_RETRY): Promise<string> {
   const singleFileBin = join(root, 'node_modules', '.bin', 'single-file');
   const output = await generateOutputPath();
   const args = [singleFileBin, url, output];
@@ -28,9 +42,26 @@ export async function downloadWebpage(url: string): Promise<string> {
   });
   const code = await proc.exited;
 
-  if (code === 0) {
+  if (code !== 0) {
+    throw new Error(`网页下载失败: ${code} ${url}`);
+  }
+
+  const valid = await isHtmlFileValid(output);
+
+  if (valid) {
     return output;
   }
 
-  throw new Error(`网页下载失败: ${code} ${url}`);
+  if (retry > 0) {
+    consola.warn(`网页下载失败，第 ${MAX_RETRY + 1 - retry} 次重试...`);
+    await Bun.sleep(1000 * (MAX_RETRY + 1 - retry));
+
+    return download(url, retry - 1);
+  }
+
+  return output;
+}
+
+export async function downloadWebpage(url: string): Promise<string> {
+  return download(url);
 }

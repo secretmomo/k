@@ -19,9 +19,11 @@ export class LarkCardState {
   private htmlFilePath = '';
   private notionLink = '';
   private messageId = '';
+  private start = 0;
 
   // 步骤一：初始化卡片状态
   async init(messageId: string) {
+    this.start = Date.now();
     this.logger.info(`1. 初始化卡片状态 messageId: ${messageId}`);
 
     const res = await replyCardMessage(messageId, this.loadingCard('1. 正在解析网页标题...'));
@@ -155,6 +157,7 @@ export class LarkCardState {
         template: 'green',
         icon: { tag: 'standard_icon', token: 'check_outlined' },
         title: { content: this.title, tag: 'plain_text' },
+        subtitle: { content: `任务耗时 ${Date.now() - this.start} 毫秒`, tag: 'plain_text' },
         text_tag_list: this.tags.map((tag) => ({
           tag: 'text_tag',
           text: { content: tag, tag: 'plain_text' },

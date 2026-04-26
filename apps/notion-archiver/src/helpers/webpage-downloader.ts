@@ -1,21 +1,17 @@
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import consola from 'consola';
 import { dateTimeToNow } from '@k/utils';
 
+import { root, resourcesDir } from './path';
+
 const MAX_RETRY = 5;
 
-const root = join(fileURLToPath(new URL('.', import.meta.url)), '..', '..');
-
 async function generateOutputPath(): Promise<string> {
-  const dateTime = dateTimeToNow('YYYY-MM-DD_HH-mm-ss');
-  const outputDir = join(root, 'webpages');
+  await mkdir(resourcesDir, { recursive: true });
 
-  await mkdir(outputDir, { recursive: true });
-
-  return join(outputDir, `${dateTime}.html`);
+  return join(resourcesDir, `${dateTimeToNow('YYYY-MM-DD_HH-mm-ss')}.html`);
 }
 
 async function isHtmlFileValid(filePath: string): Promise<boolean> {

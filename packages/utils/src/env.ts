@@ -12,7 +12,7 @@ let macHardwareInfo: MacHardwareInfo | null = null;
 /**
  * 获取 macOS 硬件信息（基于 system_profiler）
  */
-export function getMacHardwareInfo(): MacHardwareInfo {
+function getMacHardwareInfo(): MacHardwareInfo {
   if (macHardwareInfo) {
     return macHardwareInfo;
   }
@@ -44,4 +44,10 @@ export function getMacHardwareInfo(): MacHardwareInfo {
       raw: '',
     };
   }
+}
+
+export function getNodeName(): string {
+  const { modelName, chip } = getMacHardwareInfo();
+
+  return `${modelName}(${chip})`;
 }

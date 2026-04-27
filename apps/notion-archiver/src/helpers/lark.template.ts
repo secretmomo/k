@@ -1,9 +1,8 @@
 import type { InteractiveCard } from '@k/notifier/lark';
-import { dateTimeToNow, getMacHardwareInfo } from '@k/utils';
+import { dateTimeToNow, getNodeName } from '@k/utils';
 
 export function startSuccessCard() {
-  const { chip, modelName } = getMacHardwareInfo();
-  const nodeName = `${modelName}(${chip})`;
+  const nodeName = getNodeName();
 
   const card: InteractiveCard = {
     schema: '2.0',
@@ -56,8 +55,7 @@ export function startSuccessCard() {
 }
 
 export function stopSuccessCard() {
-  const { chip, modelName } = getMacHardwareInfo();
-  const nodeName = `${modelName}(${chip})`;
+  const nodeName = getNodeName();
 
   const card: InteractiveCard = {
     schema: '2.0',
